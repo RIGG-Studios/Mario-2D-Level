@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface PlayerMovement
+public interface IPlayerMovable
 {
     void Move(MoveDirections moveDirection);
 

@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerMovement))]
+[RequireComponent(typeof(IPlayerMovable))]
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerManager : MonoBehaviour
 {
-    PlayerMovement playerMovementLogic;
+    IPlayerMovable playerMovementLogic;
     InputActions inputActions;
 
     private void OnEnable() => inputActions.Enable();
@@ -16,15 +16,15 @@ public class PlayerManager : MonoBehaviour
     {
         inputActions = new InputActions();
 
-        inputActions.KeyboardAndMouse.Left.performed += ctx => playerMovementLogic.Move(PlayerMovement.MoveDirections.Left);
+        inputActions.KeyboardAndMouse.Left.performed += ctx => playerMovementLogic.Move(IPlayerMovable.MoveDirections.Left);
    
-        inputActions.KeyboardAndMouse.Right.performed += ctx => playerMovementLogic.Move(PlayerMovement.MoveDirections.Right);
+        inputActions.KeyboardAndMouse.Right.performed += ctx => playerMovementLogic.Move(IPlayerMovable.MoveDirections.Right);
 
-        inputActions.KeyboardAndMouse.Jump.performed += ctx => playerMovementLogic.Move(PlayerMovement.MoveDirections.Jump);
+        inputActions.KeyboardAndMouse.Jump.performed += ctx => playerMovementLogic.Move(IPlayerMovable.MoveDirections.Jump);
     }
 
     void Start()
     {
-        playerMovementLogic = GetComponent<PlayerMovement>();
+        playerMovementLogic = GetComponent<IPlayerMovable>();
     }
 }

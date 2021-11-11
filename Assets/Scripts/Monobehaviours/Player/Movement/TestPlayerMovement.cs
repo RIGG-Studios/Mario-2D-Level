@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //Just a script to test if I set up movement properly
-public class TestPlayerMovement : MonoBehaviour, PlayerMovement
+public class TestPlayerMovement : MonoBehaviour, IPlayerMovable
 {
     bool isMovingRight;
     bool isMovingLeft;
@@ -16,17 +16,17 @@ public class TestPlayerMovement : MonoBehaviour, PlayerMovement
     }
 
 
-    public void Move(PlayerMovement.MoveDirections moveDirection)
+    public void Move(IPlayerMovable.MoveDirections moveDirection)
     {
-        if(moveDirection == PlayerMovement.MoveDirections.Left)
+        if(moveDirection == IPlayerMovable.MoveDirections.Left)
         {
             isMovingLeft = !isMovingLeft;
         }
-        else if(moveDirection == PlayerMovement.MoveDirections.Right)
+        else if(moveDirection == IPlayerMovable.MoveDirections.Right)
         {
             isMovingRight = !isMovingRight;
         }
-        else if(moveDirection == PlayerMovement.MoveDirections.Jump)
+        else if(moveDirection == IPlayerMovable.MoveDirections.Jump)
         {
             Debug.Log("Jumped");
         }
