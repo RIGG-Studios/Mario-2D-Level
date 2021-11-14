@@ -113,7 +113,7 @@ public class PlayerMovementOp1 : MonoBehaviour, IPlayerMovable
         }
         if (!isJetpacking)
         {
-            if (forceVector.y != jumpHeight && forceVector.y != 0)
+            if (forceVector.y != jumpHeight * 10 && forceVector.y != 0)
             {
                 forceVector.y = 0;
                 if (!isGrounded)
