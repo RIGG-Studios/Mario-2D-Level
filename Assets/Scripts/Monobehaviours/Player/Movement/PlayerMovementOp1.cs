@@ -6,8 +6,9 @@ public class PlayerMovementOp1 : MonoBehaviour, IPlayerMovable
 {
     public float speed;
     public float jumpHeight;
-    public float jetpackPower;
+    public float neutralAirSpeed;
     public float midAirSpeed;
+    public float directionalAirSpeed;
 
     public float timeTillJumpApex;
     public float timeTillJumpLand;
@@ -124,7 +125,7 @@ public class PlayerMovementOp1 : MonoBehaviour, IPlayerMovable
         }
         else if (isJetpacking)
         {
-            forceVector.y = jetpackPower * 500 * Time.deltaTime;
+            forceVector.y = neutralAirSpeed * 500 * Time.deltaTime;
             rigidbody.gravityScale = 1;
         }
         if (isGrounded)
