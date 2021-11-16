@@ -361,7 +361,7 @@ GameObject:
   - component: {fileID: 1968450724}
   - component: {fileID: 1968450725}
   m_Layer: 0
-  m_Name: Player
+  m_Name: BEAN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -495,8 +495,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1
   jumpHeight: 7
-  jetpackPower: 2
-  midAirSpeed: 0.8
+  neutralAirSpeed: 3
+  directionalAirSpeed: 0.1
   timeTillJumpApex: 0.4
   timeTillJumpLand: 0.5
   fallingGravity: 2
+  rotationAmount: 1

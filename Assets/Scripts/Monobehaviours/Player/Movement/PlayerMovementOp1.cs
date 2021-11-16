@@ -7,12 +7,12 @@ public class PlayerMovementOp1 : MonoBehaviour, IPlayerMovable
     public float speed;
     public float jumpHeight;
     public float neutralAirSpeed;
-    public float midAirSpeed;
     public float directionalAirSpeed;
 
     public float timeTillJumpApex;
     public float timeTillJumpLand;
     public float fallingGravity;
+    public float rotationAmount;
 
     bool isMovingRight;
     bool isMovingLeft;
@@ -98,7 +98,7 @@ public class PlayerMovementOp1 : MonoBehaviour, IPlayerMovable
             }
             else
             {
-                forceVector.x = -midAirSpeed * 500 * Time.deltaTime;
+                forceVector.x = -directionalAirSpeed * 500 * Time.deltaTime;
             }
         }
         if (isMovingRight)
@@ -109,7 +109,7 @@ public class PlayerMovementOp1 : MonoBehaviour, IPlayerMovable
             }
             else
             {
-                forceVector.x = midAirSpeed * 500 * Time.deltaTime;
+                forceVector.x = directionalAirSpeed * 500 * Time.deltaTime;
             }
         }
         if (!isJetpacking)
