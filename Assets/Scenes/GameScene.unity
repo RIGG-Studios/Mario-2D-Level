@@ -219,7 +219,7 @@ GameObject:
   - component: {fileID: 1373821005}
   m_Layer: 0
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -302,7 +302,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.03460829}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -313,7 +313,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 1.0692165}
   m_EdgeRadius: 0
 --- !u!1 &1502696863
 GameObject:
@@ -358,8 +358,8 @@ GameObject:
   - component: {fileID: 1968450720}
   - component: {fileID: 1968450722}
   - component: {fileID: 1968450723}
-  - component: {fileID: 1968450725}
   - component: {fileID: 1968450724}
+  - component: {fileID: 1968450725}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -468,7 +468,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &1968450724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -490,6 +490,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1968450719}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e8470d1f736685478d200c4b1fa6538, type: 3}
+  m_Script: {fileID: 11500000, guid: b5fb2ef4d7c549b44b72a90c44fecf9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 1
+  jumpHeight: 7
+  jetpackPower: 2
+  midAirSpeed: 0.8
+  timeTillJumpApex: 0.4
+  timeTillJumpLand: 0.5
+  fallingGravity: 2
