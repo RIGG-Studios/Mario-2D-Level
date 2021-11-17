@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovementOp1 : MonoBehaviour, IPlayerMovable
+public class PlayerMovementOp1 : MonoBehaviour, IMoveable
 {
     public float speed;
     public float jumpHeight;
@@ -30,17 +30,17 @@ public class PlayerMovementOp1 : MonoBehaviour, IPlayerMovable
         rigidbody = GetComponent<Rigidbody2D>();
     }
 
-    public void Move(IPlayerMovable.MoveDirections moveDirection)
+    public void Move(IMoveable.MoveDirections moveDirection)
     {
-        if (moveDirection == IPlayerMovable.MoveDirections.Left)
+        if (moveDirection == IMoveable.MoveDirections.Left)
         {
             isMovingLeft = !isMovingLeft;
         }
-        else if (moveDirection == IPlayerMovable.MoveDirections.Right)
+        else if (moveDirection == IMoveable.MoveDirections.Right)
         {
             isMovingRight = !isMovingRight;
         }
-        else if (moveDirection == IPlayerMovable.MoveDirections.Jump)
+        else if (moveDirection == IMoveable.MoveDirections.Jump)
         {
             firstJump = !firstJump;
 
@@ -63,7 +63,7 @@ public class PlayerMovementOp1 : MonoBehaviour, IPlayerMovable
         }
     }
 
-    IEnumerator jumpCoroutine()
+    public IEnumerator jumpCoroutine()
     {
         forceVector.y = jumpHeight * 10;
         yield return new WaitForSeconds(0.1f);
