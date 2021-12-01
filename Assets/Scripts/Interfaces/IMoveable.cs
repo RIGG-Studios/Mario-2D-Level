@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IPlayerMovable
+public interface IMoveable
 {
     void Move(MoveDirections moveDirection);
 
@@ -11,5 +11,6 @@ public interface IPlayerMovable
         Left,
         Right,
         Jump,
+        Any,
     }
 }

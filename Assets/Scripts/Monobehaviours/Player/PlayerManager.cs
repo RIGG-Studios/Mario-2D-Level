@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(IPlayerMovable))]
-[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerManager : MonoBehaviour
 {
-    IPlayerMovable playerMovementLogic;
+    IMoveable playerMovementLogic;
+    IKillable killedLogic;
+    IAttackable attackLogic;
+
     InputActions inputActions;
+    GameObject warpPipe;
 
     private void OnEnable() => inputActions.Enable();
     private void OnDisable() => inputActions.Disable();
@@ -16,15 +18,50 @@ public class PlayerManager : MonoBehaviour
     {
         inputActions = new InputActions();
 
-        inputActions.KeyboardAndMouse.Left.performed += ctx => playerMovementLogic.Move(IPlayerMovable.MoveDirections.Left);
+        inputActions.KeyboardAndMouse.Left.performed += ctx => playerMovementLogic.Move(IMoveable.MoveDirections.Left);
    
-        inputActions.KeyboardAndMouse.Right.performed += ctx => playerMovementLogic.Move(IPlayerMovable.MoveDirections.Right);
+        inputActions.KeyboardAndMouse.Right.performed += ctx => playerMovementLogic.Move(IMoveable.MoveDirections.Right);
 
-        inputActions.KeyboardAndMouse.Jump.performed += ctx => playerMovementLogic.Move(IPlayerMovable.MoveDirections.Jump);
+        inputActions.KeyboardAndMouse.Jump.performed += ctx => playerMovementLogic.Move(IMoveable.MoveDirections.Jump);
+
+        inputActions.KeyboardAndMouse.EnterWarpPipe.performed += ctx =>
+        {
+            if(warpPipe != null)
+            {
+                warpPipe.GetComponent<WarpPipe>().Teleport(gameObject);
+            }
+        };
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (killedLogic.CheckIfDead())
+        {
+            killedLogic.Die();
+        }
+        attackLogic.DealDamage(collision);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "WarpPipe")
+        {
+            warpPipe = collision.gameObject;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "WarpPipe")
+        {
+            warpPipe = null;
+        }
     }
 
     void Start()
     {
-        playerMovementLogic = GetComponent<IPlayerMovable>();
+        playerMovementLogic = GetComponent<IMoveable>();
+        attackLogic = GetComponent<IAttackable>();
+        killedLogic = GetComponent<IKillable>();
     }
 }
