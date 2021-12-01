@@ -11,5 +11,6 @@ public interface IMoveable
         Left,
         Right,
         Jump,
+        Any,
     }
 }
