@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovementOp1 : MonoBehaviour, IPlayerMovable
+public class PlayerMovementOp1 : MonoBehaviour, IMoveable
 {
     public float speed;
     public float jumpHeight;
-    public float neutralAirSpeed;
-    public float midAirSpeed;
-    public float directionalAirSpeed;
+    public float neutralAirSpeed; //For direct vertical movement with the jetpack
+    public float directionalAirSpeed; //For vertical + horizontal movement with the jetpack
 
     public float timeTillJumpApex;
     public float timeTillJumpLand;
     public float fallingGravity;
+    public float rotationAmount;
 
     bool isMovingRight;
     bool isMovingLeft;
@@ -30,17 +30,17 @@ public class PlayerMovementOp1 : MonoBehaviour, IPlayerMovable
         rigidbody = GetComponent<Rigidbody2D>();
     }
 
-    public void Move(IPlayerMovable.MoveDirections moveDirection)
+    public void Move(IMoveable.MoveDirections moveDirection)
     {
-        if (moveDirection == IPlayerMovable.MoveDirections.Left)
+        if (moveDirection == IMoveable.MoveDirections.Left)
         {
-            isMovingLeft = !isMovingLeft;
+            isMovingLeft = !isMovingLeft; 
         }
-        else if (moveDirection == IPlayerMovable.MoveDirections.Right)
+        else if (moveDirection == IMoveable.MoveDirections.Right)
         {
             isMovingRight = !isMovingRight;
         }
-        else if (moveDirection == IPlayerMovable.MoveDirections.Jump)
+        else if (moveDirection == IMoveable.MoveDirections.Jump)
         {
             firstJump = !firstJump;
 
@@ -63,7 +63,7 @@ public class PlayerMovementOp1 : MonoBehaviour, IPlayerMovable
         }
     }
 
-    IEnumerator jumpCoroutine()
+    public IEnumerator jumpCoroutine()
     {
         forceVector.y = jumpHeight * 10;
         yield return new WaitForSeconds(0.1f);
@@ -82,7 +82,8 @@ public class PlayerMovementOp1 : MonoBehaviour, IPlayerMovable
             {
                 if (collision.contacts[i].normal.y > 0.5f)
                 {
-                    isGrounded = true;
+                    isGrounded = true; 
+                    //Checks is grounded within a certain distance of the collider to prevent early activation of the jetpack
                 }
             }
         }
@@ -95,10 +96,12 @@ public class PlayerMovementOp1 : MonoBehaviour, IPlayerMovable
             if (isGrounded)
             {
                 forceVector.x = -speed * 500 * Time.deltaTime;
+                //Sets speed for ground movement. Reminder to increase it after testing
             }
             else
             {
-                forceVector.x = -midAirSpeed * 500 * Time.deltaTime;
+                forceVector.x = -directionalAirSpeed * 500 * Time.deltaTime; 
+                //Changes speed for mid air. Reminder to set it to a more reasonable value after testing is finished
             }
         }
         if (isMovingRight)
@@ -109,7 +112,7 @@ public class PlayerMovementOp1 : MonoBehaviour, IPlayerMovable
             }
             else
             {
-                forceVector.x = midAirSpeed * 500 * Time.deltaTime;
+                forceVector.x = directionalAirSpeed * 500 * Time.deltaTime;
             }
         }
         if (!isJetpacking)
@@ -136,5 +139,39 @@ public class PlayerMovementOp1 : MonoBehaviour, IPlayerMovable
 
         rigidbody.AddForce(forceVector);
         forceVector.x = 0;
+    }
+    void Update()
+    {
+        if (!isGrounded || isJetpacking)
+        {
+            if (isMovingLeft)
+            {
+                transform.rotation = Quaternion.Euler(0, 0, 22);
+                Debug.Log("It fucking worked left");
+            }
+            else if (isMovingRight)
+            {
+                transform.rotation = Quaternion.Euler(0, 0, -22);
+                Debug.Log("It fucking worked right");
+            }
+            else
+            {
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+                Debug.Log("It fucking worked 0");
+            }
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+            Debug.Log("It fucking worked ground");
+        }
+        //This entire thing was a clusterfuck. Update sets it to a fixed angle when the conditions are met
+    }
+
+    public float GetSpeed()
+    {
+        return speed+10; 
+        //Camera speed. +10 for adjustment in gravity scale and player speed. Not very good for vertical movement
+        //It's honestly a terrible implementation but it's good for now
     }
 }

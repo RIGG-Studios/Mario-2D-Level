@@ -41,6 +41,14 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""EnterWarpPipe"",
+                    ""type"": ""Button"",
+                    ""id"": ""24835fe3-dfc7-4274-8ba3-fb6eadebecf6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -76,6 +84,17 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""87073c5c-adec-4adc-bc8c-6d3e45c154ea"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""EnterWarpPipe"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -104,6 +123,7 @@ public class @InputActions : IInputActionCollection, IDisposable
         m_KeyboardAndMouse_Left = m_KeyboardAndMouse.FindAction("Left", throwIfNotFound: true);
         m_KeyboardAndMouse_Right = m_KeyboardAndMouse.FindAction("Right", throwIfNotFound: true);
         m_KeyboardAndMouse_Jump = m_KeyboardAndMouse.FindAction("Jump", throwIfNotFound: true);
+        m_KeyboardAndMouse_EnterWarpPipe = m_KeyboardAndMouse.FindAction("EnterWarpPipe", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -156,6 +176,7 @@ public class @InputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_KeyboardAndMouse_Left;
     private readonly InputAction m_KeyboardAndMouse_Right;
     private readonly InputAction m_KeyboardAndMouse_Jump;
+    private readonly InputAction m_KeyboardAndMouse_EnterWarpPipe;
     public struct KeyboardAndMouseActions
     {
         private @InputActions m_Wrapper;
@@ -163,6 +184,7 @@ public class @InputActions : IInputActionCollection, IDisposable
         public InputAction @Left => m_Wrapper.m_KeyboardAndMouse_Left;
         public InputAction @Right => m_Wrapper.m_KeyboardAndMouse_Right;
         public InputAction @Jump => m_Wrapper.m_KeyboardAndMouse_Jump;
+        public InputAction @EnterWarpPipe => m_Wrapper.m_KeyboardAndMouse_EnterWarpPipe;
         public InputActionMap Get() { return m_Wrapper.m_KeyboardAndMouse; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -181,6 +203,9 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @Jump.started -= m_Wrapper.m_KeyboardAndMouseActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_KeyboardAndMouseActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_KeyboardAndMouseActionsCallbackInterface.OnJump;
+                @EnterWarpPipe.started -= m_Wrapper.m_KeyboardAndMouseActionsCallbackInterface.OnEnterWarpPipe;
+                @EnterWarpPipe.performed -= m_Wrapper.m_KeyboardAndMouseActionsCallbackInterface.OnEnterWarpPipe;
+                @EnterWarpPipe.canceled -= m_Wrapper.m_KeyboardAndMouseActionsCallbackInterface.OnEnterWarpPipe;
             }
             m_Wrapper.m_KeyboardAndMouseActionsCallbackInterface = instance;
             if (instance != null)
@@ -194,6 +219,9 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
+                @EnterWarpPipe.started += instance.OnEnterWarpPipe;
+                @EnterWarpPipe.performed += instance.OnEnterWarpPipe;
+                @EnterWarpPipe.canceled += instance.OnEnterWarpPipe;
             }
         }
     }
@@ -212,5 +240,6 @@ public class @InputActions : IInputActionCollection, IDisposable
         void OnLeft(InputAction.CallbackContext context);
         void OnRight(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+        void OnEnterWarpPipe(InputAction.CallbackContext context);
     }
 }

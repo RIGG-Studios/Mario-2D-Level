@@ -1,0 +1,12 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public interface IKillable
+{
+    public void Die();
+
+    public bool CheckIfDead();
+
+    public void TakeDamage(float damage);
+}
