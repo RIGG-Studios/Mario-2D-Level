@@ -4,37 +4,13 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    [SerializeField] GameObject playerObj;
+    public Transform playerTransform;
+    public float interpolationSpeed;
 
-    Transform trans;
-    PlayerMovementOp1 player;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        trans = GetComponent<Transform>();
-
-        player = playerObj.GetComponent<PlayerMovementOp1>();
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        if (playerObj.transform.position.x - trans.position.x > 3)
-        {
-            trans.position += transform.right * Time.deltaTime * player.GetSpeed();
-        }
-        if (playerObj.transform.position.x - trans.position.x < -3)
-        {
-            trans.position -= transform.right * Time.deltaTime * player.GetSpeed();
-        }
-        if (playerObj.transform.position.y - trans.position.y > 3)
-        {
-            trans.position += transform.up * Time.deltaTime * player.GetSpeed();
-        }
-        if (playerObj.transform.position.y - trans.position.y < -3)
-        {
-            trans.position -= transform.up * Time.deltaTime * player.GetSpeed();
-        }
+        transform.position = new Vector3(Mathf.Lerp(transform.position.x, playerTransform.position.x, interpolationSpeed * Time.deltaTime), 
+        Mathf.Lerp(transform.position.y, playerTransform.position.y, interpolationSpeed * Time.deltaTime), 
+        transform.position.z);
     }
 }

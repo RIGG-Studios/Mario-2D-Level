@@ -12,12 +12,20 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
     public float timeTillJumpApex;
     public float timeTillJumpLand;
     public float fallingGravity;
-    public float rotationAmount;
+
+    public float jumpForgiveness;
+    public float timeTillJetpackActivate;
 
     bool isMovingRight;
     bool isMovingLeft;
     bool isGrounded;
     bool isJetpacking;
+
+    bool isHoldingSpace;
+    bool isCurrentlyJumping;
+
+    float jumpTimer;
+    float timeHeldSpace;
 
     bool firstJump;
 
@@ -34,11 +42,13 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
     {
         if (moveDirection == IMoveable.MoveDirections.Left)
         {
-            isMovingLeft = !isMovingLeft; 
+            isMovingLeft = !isMovingLeft;
+            transform.rotation = new Quaternion(0, -180, 0, 0);
         }
         else if (moveDirection == IMoveable.MoveDirections.Right)
         {
             isMovingRight = !isMovingRight;
+            transform.rotation = new Quaternion(0, 0, 0, 0);
         }
         else if (moveDirection == IMoveable.MoveDirections.Jump)
         {
@@ -50,21 +60,29 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
             }
             if (firstJump)
             {
+                isHoldingSpace = true;
+
                 if (!isGrounded)
                 {
-                    isJetpacking = !isJetpacking;
+                    jumpTimer = Time.time;
                 }
-                if (isGrounded)
+                if (isGrounded && !isCurrentlyJumping)
                 {
-                    isGrounded = false;
                     StartCoroutine("jumpCoroutine");
                 }
+            }
+            else
+            {
+                isHoldingSpace = false;
             }
         }
     }
 
     public IEnumerator jumpCoroutine()
     {
+        jumpTimer = 0;
+        isGrounded = false;
+        isCurrentlyJumping = true;
         forceVector.y = jumpHeight * 10;
         yield return new WaitForSeconds(0.1f);
         forceVector.y = 0;
@@ -72,6 +90,7 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
         rigidbody.gravityScale = fallingGravity;
         yield return new WaitForSeconds(timeTillJumpLand);
         rigidbody.gravityScale = 1;
+        isCurrentlyJumping = false;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -82,9 +101,14 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
             {
                 if (collision.contacts[i].normal.y > 0.5f)
                 {
-                    isGrounded = true; 
+                    isGrounded = true;
                     //Checks is grounded within a certain distance of the collider to prevent early activation of the jetpack
                 }
+            }
+
+            if ((Time.time - jumpTimer) <= jumpForgiveness && jumpTimer != 0 && isGrounded)
+            {
+                StartCoroutine("jumpCoroutine");
             }
         }
     }
@@ -136,17 +160,33 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
             isJetpacking = false;
             rigidbody.gravityScale = 1;
         }
+        if (isHoldingSpace)
+        {
+            timeHeldSpace += Time.deltaTime;
+        }
+        else if (!isHoldingSpace)
+        {
+            timeHeldSpace = 0;
+        }
 
-        rigidbody.AddForce(forceVector);
+        if (timeHeldSpace > timeTillJetpackActivate)
+        {
+            isJetpacking = true;
+            isGrounded = false;
+            timeHeldSpace = 0;
+        }
+
+
+        rigidbody.AddForce(forceVector, ForceMode2D.Force);
         forceVector.x = 0;
     }
     void Update()
     {
-        if (!isGrounded || isJetpacking)
+        if (isJetpacking)
         {
             if (isMovingLeft)
             {
-                transform.rotation = Quaternion.Euler(0, 0, 22);
+                transform.rotation = Quaternion.Euler(0, -180, -22);
                 Debug.Log("It fucking worked left");
             }
             else if (isMovingRight)
@@ -159,11 +199,6 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
                 transform.rotation = Quaternion.Euler(0, 0, 0);
                 Debug.Log("It fucking worked 0");
             }
-        }
-        else
-        {
-            transform.rotation = Quaternion.Euler(0, 0, 0);
-            Debug.Log("It fucking worked ground");
         }
         //This entire thing was a clusterfuck. Update sets it to a fixed angle when the conditions are met
     }
