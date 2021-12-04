@@ -31,6 +31,11 @@ public class PlayerManager : MonoBehaviour
                 warpPipe.GetComponent<WarpPipe>().Teleport(gameObject);
             }
         };
+
+        inputActions.KeyboardAndMouse.Enter.performed += ctx =>
+        {
+             //Put stuff that happens after you press the enter key here
+        };
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
