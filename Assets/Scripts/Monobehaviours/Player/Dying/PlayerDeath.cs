@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerDeath : MonoBehaviour, IKillable
 {
     public float maxHealth;
     public float maxLives;
+
+    public Vector3 spawnPosition;
 
     float currentLives;
     float currentHealth;
@@ -36,12 +39,13 @@ public class PlayerDeath : MonoBehaviour, IKillable
     {
         if(currentLives <= 0)
         {
-            Debug.Log("Game over");
+            
         }
         else
         {
             currentLives--;
-            Debug.Log("Respawned");
+            currentHealth = maxHealth;
+            transform.position = spawnPosition;
         }
     }
 
