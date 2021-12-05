@@ -10,24 +10,19 @@ public class EntityManager : MonoBehaviour
 
     void Start()
     {
-        movementLogic = GetComponent<IMoveable>();
+        if (GetComponent<IMoveable>() != null) 
+        { 
+            movementLogic = GetComponent<IMoveable>(); 
+        }
 
         if(GetComponent<IKillable>() != null)
         {
             deathLogic = GetComponent<IKillable>();
         }
-        else
-        {
-            deathLogic = null;
-        }
 
         if(GetComponent<IAttackable>() != null)
         {
             attackLogic = GetComponent<IAttackable>();
-        }
-        else
-        {
-            attackLogic = null;
         }
     }
 
@@ -45,6 +40,9 @@ public class EntityManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        movementLogic.Move(IMoveable.MoveDirections.Any);
+        if(movementLogic != null)
+        {
+            movementLogic.Move(IMoveable.MoveDirections.Any);
+        }
     }
 }

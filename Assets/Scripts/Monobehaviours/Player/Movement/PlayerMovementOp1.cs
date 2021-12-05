@@ -12,7 +12,20 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
     public float timeTillJumpApex;
     public float timeTillJumpLand;
     public float fallingGravity;
+<<<<<<< Updated upstream
     public float rotationAmount;
+=======
+
+    public float jumpForgiveness;
+    public float timeTillJetpackActivate;
+
+    public float terminalVelocity;
+    public float maxUpwardsVelocity;
+    public float maxSpeed;
+
+    public AudioClip jumpSound;
+    public AudioClip jetpackSound;
+>>>>>>> Stashed changes
 
     bool isMovingRight;
     bool isMovingLeft;
@@ -34,11 +47,28 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
     {
         if (moveDirection == IMoveable.MoveDirections.Left)
         {
+<<<<<<< Updated upstream
             isMovingLeft = !isMovingLeft; 
+=======
+            isMovingLeft = !isMovingLeft;
+
+            if (isMovingLeft)
+            {
+                transform.rotation = new Quaternion(0, -180, 0, 0);
+            }
+>>>>>>> Stashed changes
         }
         else if (moveDirection == IMoveable.MoveDirections.Right)
         {
             isMovingRight = !isMovingRight;
+<<<<<<< Updated upstream
+=======
+
+            if (isMovingRight)
+            {
+                transform.rotation = new Quaternion(0, 0, 0, 0);
+            }
+>>>>>>> Stashed changes
         }
         else if (moveDirection == IMoveable.MoveDirections.Jump)
         {
@@ -82,7 +112,12 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
             {
                 if (collision.contacts[i].normal.y > 0.5f)
                 {
+<<<<<<< Updated upstream
                     isGrounded = true; 
+=======
+                    isGrounded = true;
+                    transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+>>>>>>> Stashed changes
                     //Checks is grounded within a certain distance of the collider to prevent early activation of the jetpack
                 }
             }
@@ -137,8 +172,21 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
             rigidbody.gravityScale = 1;
         }
 
+<<<<<<< Updated upstream
         rigidbody.AddForce(forceVector);
+=======
+        if (timeHeldSpace > timeTillJetpackActivate)
+        {
+            isJetpacking = true;
+            isGrounded = false;
+            timeHeldSpace = 0;
+        }
+
+        rigidbody.AddForce(forceVector, ForceMode2D.Force);
+>>>>>>> Stashed changes
         forceVector.x = 0;
+
+        rigidbody.velocity = new Vector2(Mathf.Clamp(rigidbody.velocity.x, -maxSpeed, maxSpeed), Mathf.Clamp(rigidbody.velocity.y, terminalVelocity, maxUpwardsVelocity));
     }
     void Update()
     {
@@ -146,18 +194,20 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
         {
             if (isMovingLeft)
             {
+<<<<<<< Updated upstream
                 transform.rotation = Quaternion.Euler(0, 0, 22);
                 Debug.Log("It fucking worked left");
+=======
+                transform.rotation = Quaternion.Euler(0, -180, -22);
+>>>>>>> Stashed changes
             }
             else if (isMovingRight)
             {
                 transform.rotation = Quaternion.Euler(0, 0, -22);
-                Debug.Log("It fucking worked right");
             }
             else
             {
-                transform.rotation = Quaternion.Euler(0, 0, 0);
-                Debug.Log("It fucking worked 0");
+                transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, 0, 0);
             }
         }
         else
@@ -166,12 +216,5 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
             Debug.Log("It fucking worked ground");
         }
         //This entire thing was a clusterfuck. Update sets it to a fixed angle when the conditions are met
-    }
-
-    public float GetSpeed()
-    {
-        return speed+10; 
-        //Camera speed. +10 for adjustment in gravity scale and player speed. Not very good for vertical movement
-        //It's honestly a terrible implementation but it's good for now
     }
 }
