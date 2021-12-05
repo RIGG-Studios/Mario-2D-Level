@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GoombaDeath : MonoBehaviour, IKillable
 {
+    public AudioSource deathSoundSource;
+
     public bool CheckIfDead()
     {
         return false;
@@ -11,6 +13,7 @@ public class GoombaDeath : MonoBehaviour, IKillable
 
     public void Die()
     {
+        deathSoundSource.Play();
         Destroy(gameObject);
     }
 
