@@ -49,12 +49,20 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
         if (moveDirection == IMoveable.MoveDirections.Left)
         {
             isMovingLeft = !isMovingLeft;
-            transform.rotation = new Quaternion(0, -180, 0, 0);
+
+            if (isMovingLeft)
+            {
+                transform.rotation = new Quaternion(0, -180, 0, 0);
+            }
         }
         else if (moveDirection == IMoveable.MoveDirections.Right)
         {
             isMovingRight = !isMovingRight;
-            transform.rotation = new Quaternion(0, 0, 0, 0);
+
+            if (isMovingRight)
+            {
+                transform.rotation = new Quaternion(0, 0, 0, 0);
+            }
         }
         else if (moveDirection == IMoveable.MoveDirections.Jump)
         {
@@ -110,6 +118,7 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
                 if (collision.contacts[i].normal.y > 0.5f)
                 {
                     isGrounded = true;
+                    transform.rotation = Quaternion.Euler(0, 0, 0);
                     //Checks is grounded within a certain distance of the collider to prevent early activation of the jetpack
                 }
             }
@@ -205,17 +214,14 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
             if (isMovingLeft)
             {
                 transform.rotation = Quaternion.Euler(0, -180, -22);
-                Debug.Log("It fucking worked left");
             }
             else if (isMovingRight)
             {
                 transform.rotation = Quaternion.Euler(0, 0, -22);
-                Debug.Log("It fucking worked right");
             }
             else
             {
                 transform.rotation = Quaternion.Euler(0, 0, 0);
-                Debug.Log("It fucking worked 0");
             }
         }
         //This entire thing was a clusterfuck. Update sets it to a fixed angle when the conditions are met
