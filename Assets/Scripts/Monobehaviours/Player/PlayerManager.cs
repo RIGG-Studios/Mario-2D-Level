@@ -11,6 +11,7 @@ public class PlayerManager : MonoBehaviour
     InputActions inputActions;
     GameObject warpPipe;
 
+
     private void OnEnable() => inputActions.Enable();
     private void OnDisable() => inputActions.Disable();
 

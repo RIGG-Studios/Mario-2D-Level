@@ -16,6 +16,9 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
     public float jumpForgiveness;
     public float timeTillJetpackActivate;
 
+    public AudioClip jumpSound;
+    public AudioClip jetpackSound;
+
     bool isMovingRight;
     bool isMovingLeft;
     bool isGrounded;
@@ -31,11 +34,14 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
 
     new Rigidbody2D rigidbody;
 
+    AudioSource audioSource;
+
     Vector2 forceVector;
 
     void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void Move(IMoveable.MoveDirections moveDirection)
@@ -68,6 +74,8 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
                 }
                 if (isGrounded && !isCurrentlyJumping)
                 {
+                    audioSource.clip = jumpSound;
+                    audioSource.Play();
                     StartCoroutine("jumpCoroutine");
                 }
             }
@@ -139,11 +147,14 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
                 forceVector.x = directionalAirSpeed * 500 * Time.deltaTime;
             }
         }
+
         if (!isJetpacking)
         {
             if (forceVector.y != jumpHeight * 10 && forceVector.y != 0)
             {
                 forceVector.y = 0;
+                audioSource.loop = false;
+
                 if (!isGrounded)
                 {
                     rigidbody.gravityScale = fallingGravity;
@@ -152,6 +163,13 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
         }
         else if (isJetpacking)
         {
+            if(audioSource.clip != jetpackSound || audioSource.loop == false)
+            {
+                audioSource.clip = jetpackSound;
+                audioSource.loop = true;
+                audioSource.Play();
+            }
+
             forceVector.y = neutralAirSpeed * 500 * Time.deltaTime;
             rigidbody.gravityScale = 1;
         }
