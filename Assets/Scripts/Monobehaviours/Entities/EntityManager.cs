@@ -38,6 +38,14 @@ public class EntityManager : MonoBehaviour
         }
     }
 
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (attackLogic != null)
+        {
+            attackLogic.DealDamage(collision);
+        }
+    }
+
     void FixedUpdate()
     {
         if(movementLogic != null)

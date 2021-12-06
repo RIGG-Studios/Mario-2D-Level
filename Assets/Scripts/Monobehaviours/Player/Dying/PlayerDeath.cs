@@ -38,7 +38,7 @@ public class PlayerDeath : MonoBehaviour, IKillable
     {
         if(currentLives <= 0)
         {
-            Debug.Log("Game over");
+            SceneManager.LoadScene("Main Menu");
         }
         else
         {
