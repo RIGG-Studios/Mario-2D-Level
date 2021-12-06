@@ -30,6 +30,8 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
     //Jetpack sound
     public AudioClip jetpackSound;
 
+    public ParticleSystem jetpackParticles;
+
     Animator anim;
 
     //Jetpack fuel amount
@@ -185,7 +187,7 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
                 {
                     //Sets isgrounded to true and sets the player's rotation, so they don't stay leaning after they used the jetpack and landed
                     isGrounded = true;
-                    transform.rotation = Quaternion.Euler(0, 0, 0);
+                    transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
                 }
             }
 
@@ -238,6 +240,7 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
         //If not isjetpacking
         if (!isJetpacking)
         {
+            jetpackParticles.Stop(false, ParticleSystemStopBehavior.StopEmitting);
             //If the forcevector.y is not equal to jumpheight and forcevector.y is not 0
             if (forceVector.y != jumpHeight * 10 && forceVector.y != 0)
             {
@@ -256,6 +259,7 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
         //Else if isjetpacking and jetpackfuel is above 0
         else if (isJetpacking && jetpackFuel > 0)
         {
+            jetpackParticles.Play(false);
             //Decrease jetpackfuel by jetpackdepletionspeed
             jetpackFuel -= jetpackDepletionSpeed * Time.deltaTime;
 
@@ -296,12 +300,29 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
         }
 
         //If the player holds space for longer than the time it takes to activate the jetpack
-        if (timeHeldSpace > timeTillJetpackActivate)
+        if (timeHeldSpace > timeTillJetpackActivate && jetpackFuel > 0)
         {
             //Set isjetpacking to true, and isgrounded to false, and timeheldspace to zero
             isJetpacking = true;
             isGrounded = false;
             timeHeldSpace = 0;
+        }
+
+        if (forceVector.x != 0 && isGrounded || isMovingLeft && isGrounded || isMovingRight && isGrounded)
+        {
+            anim.SetBool("Walking", true);
+        }
+        else if(forceVector.x == 0 || !isMovingLeft || !isMovingRight || !isGrounded)
+        {
+            anim.SetBool("Walking", false);
+        }
+        if (isCurrentlyJumping)
+        {
+            anim.SetBool("Jumping", true);
+        }
+        else
+        {
+            anim.SetBool("Jumping", false);
         }
 
         //Add the forcevector to the rigidbody with acceleration force and after reset the x value of forcevector
@@ -313,9 +334,8 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
     void Update()
     {
         //If isjetpacking
-        if (isJetpacking)
+        if (isJetpacking && jetpackFuel > 0)
         {
-            anim.SetBool("Jetpacking", true);
             //If ismovingleft
             if (isMovingLeft)
             {
@@ -335,24 +355,7 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
             {
                 //Don't tilt
                 transform.rotation = Quaternion.Euler(0, 0, 0);
-                anim.SetBool("Jetpacking", false);
             }
-        }
-        if ((isMovingLeft || isMovingRight) && isGrounded)
-        {
-            anim.SetBool("Walking", true);
-        }
-        else
-        {
-            anim.SetBool("Walking", false);
-        }
-        if (isCurrentlyJumping)
-        {
-            anim.SetBool("Jumping", true);
-        }
-        else
-        {
-            anim.SetBool("Jumping", false);
         }
     }
 }

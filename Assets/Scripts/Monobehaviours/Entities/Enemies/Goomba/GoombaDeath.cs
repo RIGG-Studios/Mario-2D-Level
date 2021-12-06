@@ -5,6 +5,12 @@ using UnityEngine;
 public class GoombaDeath : MonoBehaviour, IKillable
 {
     public AudioSource deathSoundSource;
+    Animator goombaAnimator;
+
+    private void Start()
+    {
+        goombaAnimator = GetComponent<Animator>();
+    }
 
     public bool CheckIfDead()
     {
@@ -13,6 +19,7 @@ public class GoombaDeath : MonoBehaviour, IKillable
 
     public void Die()
     {
+        goombaAnimator.SetTrigger("Die");
         deathSoundSource.Play();
         Destroy(gameObject);
     }
@@ -20,6 +27,5 @@ public class GoombaDeath : MonoBehaviour, IKillable
     public void TakeDamage(float damage)
     {
         Die();
-        Debug.Log("Killed goomba");
     }
 }

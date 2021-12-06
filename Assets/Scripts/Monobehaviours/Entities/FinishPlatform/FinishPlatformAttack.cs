@@ -9,7 +9,7 @@ public class FinishPlatformAttack : MonoBehaviour, IAttackable
     {
         if(collision.gameObject.tag == "Player")
         {
-            SceneManager.LoadScene("Level 1");
+            SceneManager.LoadScene("Menu");
         }
     }
 }

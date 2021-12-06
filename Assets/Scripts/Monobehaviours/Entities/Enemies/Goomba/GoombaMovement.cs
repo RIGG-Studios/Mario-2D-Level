@@ -12,8 +12,7 @@ public class GoombaMovement : MonoBehaviour, IMoveable
 
     public void Start()
     {
-        rigidBody = GetComponent<Rigidbody2D>();
-    }
+        rigidBody = GetComponent<Rigidbody2D>();    }
     public void Move(IMoveable.MoveDirections moveDirection)
     {
         if(moveDirection == IMoveable.MoveDirections.Any)
