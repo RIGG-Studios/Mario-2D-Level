@@ -30,6 +30,8 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
     //Jetpack sound
     public AudioClip jetpackSound;
 
+    Animator anim;
+
     //Jetpack fuel amount
     public float jetpackFuel;
     //Max jetpack fuel amount
@@ -74,6 +76,7 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
         rigidbody = GetComponent<Rigidbody2D>();
         audioSource = GetComponent<AudioSource>();
         jetpackFuel = maxJetpackFuel;
+        anim = GetComponent<Animator>();
     }
 
     //Main move function, called from playermanager, uses a movedirection to move a certain direction
@@ -312,6 +315,7 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
         //If isjetpacking
         if (isJetpacking)
         {
+            anim.SetBool("Jetpacking", true);
             //If ismovingleft
             if (isMovingLeft)
             {
@@ -331,7 +335,24 @@ public class PlayerMovementOp1 : MonoBehaviour, IMoveable
             {
                 //Don't tilt
                 transform.rotation = Quaternion.Euler(0, 0, 0);
+                anim.SetBool("Jetpacking", false);
             }
-        }    
+        }
+        if ((isMovingLeft || isMovingRight) && isGrounded)
+        {
+            anim.SetBool("Walking", true);
+        }
+        else
+        {
+            anim.SetBool("Walking", false);
+        }
+        if (isCurrentlyJumping)
+        {
+            anim.SetBool("Jumping", true);
+        }
+        else
+        {
+            anim.SetBool("Jumping", false);
+        }
     }
 }
